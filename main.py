@@ -1,11 +1,11 @@
 import os
+import os.path
 import imgkit
 
 
 os.system('neofetch --stdout > neofetch_output.txt')
 neofetch_output = open("neofetch_output.txt", "r")
 data = neofetch_output.read()
-print(data)
 # Reading the file
 with open('index.html', 'r') as file:
     filedata = file.read()
@@ -22,16 +22,27 @@ os.system('feh result.png')
 
 
 def remove_junk():
-    remove_junk = input('You want to remove junk files? (y/n): ')
-    if remove_junk == 'y':
-        os.remove("result.png")
-        os.remove("render.html")
-        os.remove("neofetch_ııoutput.txt")
-    elif remove_junk == 'n':
-        quit()
-    else:
-        print('Invalid input. Try again.')
-        remove_junk()
 
+    if os.path.isfile("./.alwaysremove") == False:
+       remove_junk = input('Remove junk files? ((Y)es/(N)o/(A)lways): ')
+       if remove_junk == 'y' or 'Y':
+           os.remove("result.png")
+           os.remove("render.html")
+           os.remove("neofetch_output.txt")
+       elif remove_junk == 'n' or 'N':
+           quit()
+       elif remove_junk == 'a' or 'A':
+            os.remove("result.png")
+            os.remove("render.html")
+            os.remove("neofetch_output.txt")
+            os.system("touch .alwaysremove")
+       else:
+           print('Invalid input. Try again.')
+           remove_junk()
+
+    elif os.path.isfile("./.alwaysremove") == True:
+       os.remove("result.png")
+       os.remove("render.html")
+       os.remove("neofetch_output.txt")
 
 remove_junk()
